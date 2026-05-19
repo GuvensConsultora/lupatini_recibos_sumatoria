@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--
+            Lupatini — agrega total al pie de la columna "Monto" (balance)
+            en la pestaña Deudas del recibo.
+
+            Por qué balance y no amount_residual:
+            - balance es store=True monetary, el sum funciona a nivel SQL.
+            - amount_residual está reemplazado por el OCA por un campo
+              computed con store=False (payment_group_matched_amount),
+              y los sum sobre non-stored no se renderizan (por eso los
+              pies hoy aparecen como "—").
+            - balance refleja el importe original; para facturas sin pagos
+              parciales coincide con el saldo pendiente.
+        -->
+
+        <record id="view_move_line_tree_lupatini_sum" model="ir.ui.view">
+            <field name="name">account.move.line.tree.lupatini.sumatoria</field>
+            <field name="inherit_id" ref="account_payment_group.view_move_line_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='balance']" position="attributes">
+                    <attribute name="sum">Total</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

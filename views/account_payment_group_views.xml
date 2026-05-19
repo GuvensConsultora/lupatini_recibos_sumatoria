@@ -18,6 +18,7 @@
 
         <record id="view_move_line_tree_lupatini_sum" model="ir.ui.view">
             <field name="name">account.move.line.tree.lupatini.sumatoria</field>
+            <field name="model">account.move.line</field>
             <field name="inherit_id" ref="account_payment_group.view_move_line_tree"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='balance']" position="attributes">

@@ -10,7 +10,7 @@ class AccountPaymentGroup(models.Model):
         compute='_compute_debt_total_amount',
     )
 
-    @api.depends('debt_move_line_ids.amount_residual')
+    @api.depends('debt_move_line_ids')
     def _compute_debt_total_amount(self):
         for rec in self:
             rec.debt_total_amount = sum(

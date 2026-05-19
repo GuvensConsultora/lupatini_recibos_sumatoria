@@ -1,8 +1,8 @@
 {
     'name': 'Lupatini — Sumatoria en pestaña Deudas del recibo',
-    'version': '17.0.1.0.0',
+    'version': '17.0.1.1.0',
     'category': 'Accounting/Localizations/Argentina',
-    'summary': 'Agrega total al pie de la columna "Monto" en la pestaña Deudas del recibo (account.payment.group). Sólo extiende la vista, sin tocar lógica del módulo OCA account_payment_group.',
+    'summary': 'Muestra la deuda total del partner ("Deuda Total") al abrir el recibo, sumando amount_residual de debt_move_line_ids. Adicionalmente agrega sum=Total a la columna "Monto" del listado (sólo aplica en pestaña Líneas de pagos, que es store=True).',
     'author': 'Yagüven C.G.',
     'license': 'AGPL-3',
     'depends': [

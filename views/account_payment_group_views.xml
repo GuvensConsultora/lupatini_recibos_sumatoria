@@ -28,11 +28,12 @@
         </record>
 
         <!--
-            Campo "Total deuda del cliente" al pie de la pestaña Deudas,
-            con estilo subtotal a la derecha (como el subtotal de facturas).
-            Suma amount_residual de debt_move_line_ids (saldo pendiente).
-            Como debt_move_line_ids es many2many computed store=False, el
-            footer sum del listado no funciona — este campo lo reemplaza.
+            "Deuda Total" al pie de la pestaña Deudas, con estilo subtotal a
+            la derecha (como el subtotal de facturas). Suma amount_residual
+            de to_pay_move_line_ids con signo según partner_type, replicando
+            el criterio del OCA selected_debt. Lo expone como campo propio
+            porque el footer sum nativo del listado falla sobre m2m computed
+            no stored (caso del OCA debt_move_line_ids).
         -->
         <record id="view_account_payment_group_form_lupatini_debt_total" model="ir.ui.view">
             <field name="name">account.payment.group.form.lupatini.debt_total</field>

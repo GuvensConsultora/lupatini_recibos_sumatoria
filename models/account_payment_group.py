@@ -21,10 +21,20 @@ class AccountPaymentGroup(models.Model):
     # cualquiera de sus líneas. El signo replica la convención del OCA
     # `_compute_selected_debt`: proveedor = -1 (residuales negativos quedan en
     # positivo si el cliente quiere leer "cuánto debo pagar"), cliente = +1.
+    def _debt_total(self):
+        self.ensure_one()
+        sign = -1.0 if self.partner_type == 'supplier' else 1.0
+        return sign * sum(self.to_pay_move_line_ids.mapped('amount_residual'))
+
     @api.depends('to_pay_move_line_ids.amount_residual', 'partner_type')
     def _compute_debt_total_amount(self):
         for rec in self:
-            sign = -1.0 if rec.partner_type == 'supplier' else 1.0
-            rec.debt_total_amount = sign * sum(
-                rec.to_pay_move_line_ids.mapped('amount_residual')
-            )
+            rec.debt_total_amount = rec._debt_total()
+
+    # El @api.depends recalcula bien al guardar/leer, pero el campo es no-stored
+    # y el cliente web no siempre re-pide este total al agregar/quitar facturas
+    # inline -> el valor quedaba "colgado" a veces (reporte Anael 2026-05-28).
+    # Un onchange explícito sobre to_pay_move_line_ids fuerza el refresco en vivo.
+    @api.onchange('to_pay_move_line_ids', 'partner_type')
+    def _onchange_debt_total_amount(self):
+        self.debt_total_amount = self._debt_total()
